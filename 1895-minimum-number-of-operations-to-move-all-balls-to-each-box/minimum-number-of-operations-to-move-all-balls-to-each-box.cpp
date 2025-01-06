@@ -1,19 +1,23 @@
 class Solution {
 public:
     vector<int> minOperations(string boxes) {
-        vector<int> results;
-        int answer = 0;
-        
-        for (int i = 0; i < boxes.size(); i++) {
-            for (int j = 0; j < boxes.size(); j++) {
-                if (boxes[j] == '1') {
-                    answer += abs(j - i);
-                }
-            }
-            results.push_back(answer);
-            answer = 0;
+        int boxSize = boxes.size();
+        vector<int> answer(boxSize, 0);
+        int cumVal = 0, cumSum = 0;
+
+        for (int idx = 0; idx < boxSize; idx++) {
+            answer[idx] = cumSum;
+            cumVal += boxes[idx] == '0' ? 0 : 1;
+            cumSum += cumVal;
         }
 
-        return results;
+        cumVal = 0, cumSum = 0;
+        for (int idx = boxSize - 1; idx >= 0; idx--) {
+            answer[idx] += cumSum;
+            cumVal += boxes[idx] == '0' ? 0 : 1;
+            cumSum += cumVal;
+        }
+
+        return answer;
     }
 };
