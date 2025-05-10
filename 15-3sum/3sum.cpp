@@ -3,37 +3,40 @@ const auto _ = std::cin.tie(nullptr)->sync_with_stdio(false);
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
-        int n = nums.size();
-        if (n < 3) {
+        int len = nums.size();
+        if (len < 3) {
             return {};
         }
 
         sort(nums.begin(), nums.end());
-        vector<vector<int>> answer;
 
-        for (int i = 0; i < n; i++) {
-            if (i > 0 && nums[i] == nums[i-1]) {
+        if (nums[0] > 0) {
+            return {};
+        }
+
+        vector<vector<int>> answer;
+        unordered_map<int, int> mp;
+        for (int i = 0; i < len; i++) {
+            mp[nums[i]] = i;
+        }
+
+        for (int i = 0; i < len - 2; i++) {
+            if (nums[i] > 0) {
+                break;
+            }
+            if (i > 0 && nums[i] == nums[i - 1]) {
                 continue;
             }
+            for (int j = i + 1; j < len - 1; j++) {
+                const int reqSum = 0 - (nums[i] + nums[j]);
 
-            int left = i + 1;
-            int right = n - 1;
-
-            while (left < right) {
-                int total = nums[i] + nums[left] + nums[right];
-                if (total > 0) {
-                    right--;
-                } else if (total < 0) {
-                    left++;
-                } else {
-                    answer.push_back({nums[i], nums[left], nums[right]});
-                    left++;
-
-                    while (nums[left] == nums[left - 1] && left < right) {
-                        left++;
-                    }
+                if (mp.count(reqSum) && mp.find(reqSum)->second > j) {
+                    answer.push_back({nums[i], nums[j], nums[mp[reqSum]]});
                 }
+
+                j = mp.find(nums[j])->second;
             }
+            i = mp.find(nums[i])->second;
         }
 
         return answer;
