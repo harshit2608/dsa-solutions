@@ -1,30 +1,24 @@
-const auto _ = std::cin.tie(nullptr)->sync_with_stdio(false);
-
 class Solution {
 public:
     vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
         vector<int> answer;
-        stack<int> st;
-        unordered_map<int, int> mp;
+        unordered_map<int, int> ngeIndex;
+        stack<int> ms;
 
-        for (int i = nums2.size() - 1; i >= 0; i--) {
-            while (!st.empty() && st.top() <= nums2[i]) {
-                st.pop();
+        for (const auto& i : nums2) {
+            while (!ms.empty() && (i > ms.top())) {
+                ngeIndex[ms.top()] = i;
+                ms.pop();
             }
-
-            if (st.empty()) {
-                mp[nums2[i]] = -1;
-            } else {
-                mp[nums2[i]] = st.top();
-            }
-
-            st.push(nums2[i]);
+            ms.push(i);
         }
-
-        for (int i = 0; i < nums1.size(); i++) {
-            answer.push_back(mp[nums1[i]]);
+        while (!ms.empty()) {
+            ngeIndex[ms.top()] = -1;
+            ms.pop();
         }
-
+        for (const auto& i : nums1) {
+            answer.push_back(ngeIndex[i]);
+        }
         return answer;
     }
 };
