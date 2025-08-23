@@ -14,7 +14,7 @@ public:
 
             prefix *= nums[i];
             suffix *= nums[sz - i - 1];
-            prod = max({prod, prefix, suffix});
+            prod = max(prod, max(prefix, suffix));
         }
         return prod;
     }
