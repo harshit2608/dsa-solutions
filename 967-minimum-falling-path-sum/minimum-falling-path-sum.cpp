@@ -24,10 +24,11 @@ private:
 public:
     int minFallingPathSum(vector<vector<int>>& matrix) {
         int n = matrix.size();
+        dp.assign(n, vector<int>(n, INT_MAX));
 
         int answer = INT_MAX;
         for (int i = 0; i < n; i++) {
-            dp.assign(n, vector<int>(n, INT_MAX));
+
             answer = min(answer, solve(matrix, n, 0, i));
         }
 
